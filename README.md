@@ -1,53 +1,89 @@
-# importer-exporter-telegram
-Telegram importer and exporter tool that offers more and more diverse features than other similar tools
+# addmember-telegram
+Use `python 3` to add member from Group A to Group B (migrate members of your group)
 
-## how to setup
+
+## Require
+* Environment of python 3 (Linux, Window)
+* Need about 20 accounts to run (Switches accounts automatically when blocked)
+* Each account needs to be in Source Group and Target Group
+* Notice your region phone
+* Your group must be a Super group
+
+https://www.wikihow.com/Convert-a-Telegram-Group-to-a-Supergroup-on-PC-or-Mac
+
+![Supper group](images/note_tele.png)
+![Upgraded Supper group](images/note_tele2.png)
+
+## Guide line
+
+* Step 1: Install package `telethon`
 ```
-+ git clone https://github.com/CyberIsabella/importer-exporter-telegram
-+ pip install telethon
-+ you need to log in to My.telegram.org to get the api-id and api-hash and fill in the config.json file. In addition, multiple accounts can be placed in the config.json file   
+pip install telethon
+```
+
+* Step 2: Create file config.json
+Copy file config.json from config.example.json
 
 ```
-![Screenshot 2023-04-15 051748](https://user-images.githubusercontent.com/122454821/232222941-9e5f566e-01b5-4ec3-865e-428cfa4f90a8.png)
+{
+	"group_target": 1398120166, --> id target group
+	"group_source": 1490302444, --> id source group
+	"accounts": [ --> array account
+		{
+			"phone": "+84XXXX",
+			"api_id": 1234566,
+			"api_hash": "57c6f3c72c2f21676d53be2eXXXXXX"
+		}
+	]
+}
+```
+`group_target` and `group_source`: after running get_data.py, check files in data/group
+`accounts`: list your Telegram accounts; and for each accounts/phone, create an app in https://my.telegram.org/apps and copy the `api_id` and  `api_hash` into the config file.
 
-## initial
-In order to activate our session and log in, we need to type the following command:
-`python init_session.py`
-After this command, it will log in all the accounts you have entered in config.json
+* Step 3: After setting up your `config.json` file, run `python init_session.py`, enter phone and the code you received
 
-## exporter
-First of all, it should be noted that naturally, only users who are in groups and supergroups can be extracted, because channel users can only be seen by the admin and the creator of the channel, and no one else has access to it.
+![Init session](images/step1.png)
 
-### from group
-+ `python   get_data.py`
+* Step 4: run `python get_data.py` to get data of group, data user and save file in folder `data`
 
-### from channel
-If we were the admin or creator of the channel, we can get the information of the members of that channel. For this, we first enter the name of the channel in the get_channel.py code (in the channel=' ' section)
-after that we run it:
-+ `python get_channel.py`
+![Get data](images/step2.png)
+![Data after Get](images/data_step2.png)
 
+```
+{
+    "user_id": "847587728",
+    "access_hash": "2393668282771176567",
+    "username": "None"
+}
+```
+One group have one list user (list username), but each account Telegram have list User (difference user_id, access_hash). Use `user_id` and `access_hash` to add member, so you need get list user of each account Telegram.
+Note: Use username have also use to add member, but something use not have username
 
-![cha](https://user-images.githubusercontent.com/122454821/232223546-fa7d4104-b4f0-4364-a6cd-00d706ca0641.png)
+After run get data, check again file in data/group and edit file config to change group_target, group_source, which you want to add.
 
+* Step 5: run `python add_member.py` to add member from `group_source` to `group_target`
+Logic: 
+	* after adding 1 member, sleep 2 minutes
+	* after each account adds 35 members --> sleep 15 minutes
+	* Remove account when there is a Flood Wait Error
+	* Break if there are no more accounts
 
-The saved information is stored in the data folder and This information is divided into two parts:
+Note: If your account gets blocked, go to https://web.telegram.org/#/im?p=@SpamBot and chat /start to see the time the ban would be lifted
 
-**groups:** Inside the json file that is in the data-->group section, the id and name of all groups and channels are located based on each account (phone number).
+![Get data](images/block.png)
 
-**users:** Every json file that is in the data-->user section contains the information of the users of the same group. The files are categorized based on the id of the groups and inside each file there is an id, access_hash, the last date of being online and most importantly, the username of each person.
+Done!
 
-![ddddd](https://user-images.githubusercontent.com/122454821/232223345-8d63d622-0f25-4147-af41-7892108a4e28.png)
+## Ps: 
+This repo is now actively being maintained and updated by:
+south1907 and DanielTheGeek.
 
-## importer
+Create a new issue if you have legit issues and we will do our best to resolve them.
 
-If we act in the normal way, the user information is located in the data  user section and is specified based on the id of each group. To add, we go to the config.json section and in the group_target section we put the ID of the group or channel in which we want to add users, and in the group_source section we put the ID of the group or channel from which we got the people's information. (this id can be obtained from the data-->group section)
-
-+ `python  add_member.py`
-
-![final](https://user-images.githubusercontent.com/122454821/232223776-db2a1527-1eff-4efa-8b78-8af1818eacc2.png)
-
-
-
-
-
-
+## Contributing:
+* Fork the repo on Github
+* Clone the repo using `git clone addmember-telegram`
+* Make changes and stage the files: `git add .`
+* Commit the changes: `git commit -m "Changed a few things"`
+* Push the changes to your Github repo: `git push -u origin main`
+* Submit a pull request.

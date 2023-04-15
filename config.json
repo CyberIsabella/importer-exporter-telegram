@@ -1,0 +1,12 @@
+{
+	"group_target": 1111111111,
+	"group_source": 2222222222,
+	"from_date_active": "20230104",
+	"accounts": [
+		{
+			"phone": "", 
+			"api_id": 11111111,
+			"api_hash": "27bb5bmkjbc989957ffg45d154568774"
+		}
+	]
+}
