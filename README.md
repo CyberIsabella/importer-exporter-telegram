@@ -43,7 +43,7 @@ The saved information is stored in the data folder and This information is divid
 
 ## importer
 
-If we act in the normal way, the user information is located in the data  user section and is specified based on the id of each group. To add, we go to the config.json section and in the group_target section we put the ID of the group or channel in which we want to add users, and in the group_source section we put the ID of the group or channel from which we got the people's information. (this id can be obtained from the data-->group section)
+If we act in the normal way, the user information is located in the data-->user section and is specified based on the id of each group. To add, we go to the config.json section and in the group_target section we put the ID of the group or channel in which we want to add users, and in the group_source section we put the ID of the group or channel from which we got the people's information. (this id can be obtained from the data-->group section)
 
 + `python  add_member.py`
 
